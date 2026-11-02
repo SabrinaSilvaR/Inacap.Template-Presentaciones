@@ -538,99 +538,54 @@ Speaker Notes:
 ---
 
 <div class="flex-between items-center mb-1">
-  <div class="eyebrow">Arquitectura de Software · Diseño To-Be</div>
+  <div class="eyebrow">Transición · Restricciones y decisiones preliminares</div>
   <span class="chip bg-slate-100 text-xs font-semibold text-ink-soft border border-slate-200">
-    <div class="i-mdi-layers-outline mr-1 text-brand-red" /> Patrón Arquitectónico
+    <div class="i-mdi-shield-check-outline mr-1 text-brand-red" /> Continuidad operativa
   </span>
 </div>
 
-# <span class="i-mdi-layers-triple-outline align-middle mr-2 text-brand-red" /> 5 · Arquitectura To-Be en 3 Capas
+# <span class="i-mdi-swap-horizontal align-middle mr-2 text-brand-red" /> 5 · Modernizar sin alterar los contratos actuales
 
-<div class="grid grid-cols-[1.25fr_1.1fr] gap-3 mt-1">
-
-<div class="card p-2 border-t-3 border-brand-red flex flex-col justify-center">
-  <div class="text-xs font-bold text-brand-red-dark mb-1 flex items-center gap-1">
-    <div class="i-mdi-server-network text-base text-brand-red" /> Diagrama Arquitectónico To-Be
+<div class="grid grid-cols-3 gap-3 mt-3 text-xs">
+  <div class="card p-3 border-t-3 border-brand-navy">
+    <div class="font-bold text-brand-navy-dark text-sm mb-2 flex items-center gap-1.5">
+      <div class="i-mdi-server-network text-base text-brand-navy" /> Contexto actual
+    </div>
+    <p class="text-ink/80 leading-relaxed">
+      Sistema legado sobre .NET y SQL Server. El equipo de TI lo utiliza dentro de Citrix con Microsoft Edge.
+    </p>
   </div>
 
-```mermaid {scale: 0.58}
-flowchart TD
-  classDef red fill:#FEE2E2,stroke:#E11927,stroke-width:1.5px,color:#991B1B;
-  classDef navy fill:#E0E7FF,stroke:#0A2540,stroke-width:1.5px,color:#0A2540;
-  classDef crimson fill:#FFE4E6,stroke:#991B1B,stroke-width:1.5px,color:#991B1B;
-  classDef dark fill:#1E293B,stroke:#0F172A,stroke-width:1.5px,color:#FFFFFF;
-
-  React["1. React SPA (Citrix Edge)"]:::navy
-  Fast["2. .NET 10 FastEndpoints (REPR)"]:::red
-  Engine["Motor RBAC (Validación C#)"]:::red
-  Redis[("Redis Cache (< 5 ms)")]:::crimson
-  SQL[("SQL Server (Base de Datos)")]:::dark
-  SPs["SPs Fachada"]:::navy
-  Sats["37 Satélites"]:::dark
-
-  React -->|HTTPS / JSON| Fast
-  Fast <--> Engine
-  Engine --> Redis
-  Engine -->|EF Core| SQL
-  Sats -->|Llamadas| SPs
-  SPs -.->|Lectura| SQL
-```
-
-</div>
-
-<div class="flex flex-col gap-1.5 text-xs">
-  <div class="card p-2 border-l-3 border-[#00D8FE] bg-white">
-    <div class="flex items-center gap-1.5 font-bold text-ink">
-      <div class="i-simple-icons-react text-[#00D8FE] text-base shrink-0" />
-      <div class="i-simple-icons-typescript text-[#3178C6] text-base shrink-0" />
-      <span class="text-xs">React SPA + TypeScript (Frontend)</span>
+  <div class="card p-3 border-t-3 border-brand-crimson">
+    <div class="font-bold text-brand-crimson text-sm mb-2 flex items-center gap-1.5">
+      <div class="i-mdi-link-variant text-base text-brand-crimson" /> Restricción del cliente
     </div>
-    <div class="text-[10.5px] text-ink/75 mt-0.5 leading-snug">
-      Optimizado para Microsoft Edge en Citrix. Comparador en pantalla dividida sin recargas.
-    </div>
+    <p class="text-ink/80 leading-relaxed">
+      Los 37 sistemas satélite consumen procedimientos almacenados. Se debe conservar su firma y resultado, sin modificar esas aplicaciones.
+    </p>
   </div>
 
-  <div class="card p-2 border-l-3 border-[#512BD4] bg-white">
-    <div class="flex items-center gap-1.5 font-bold text-ink">
-      <div class="i-simple-icons-dotnet text-[#512BD4] text-base shrink-0" />
-      <div class="i-mdi-lightning-bolt text-amber-500 text-base shrink-0" />
-      <span class="text-xs">.NET 10 + FastEndpoints (Backend)</span>
+  <div class="card p-3 border-t-3 border-brand-red">
+    <div class="font-bold text-brand-red-dark text-sm mb-2 flex items-center gap-1.5">
+      <div class="i-mdi-clipboard-check-outline text-base text-brand-red" /> Decisión preliminar
     </div>
-    <div class="text-[10.5px] text-ink/75 mt-0.5 leading-snug">
-      Patrón REPR (Request-Endpoint-Response). API nativa en C# de ultra alto rendimiento.
-    </div>
-  </div>
-
-  <div class="card p-2 border-l-3 border-[#DC382D] bg-white">
-    <div class="flex items-center gap-1.5 font-bold text-ink">
-      <div class="i-simple-icons-redis text-[#DC382D] text-base shrink-0" />
-      <div class="i-mdi-speedometer text-brand-red text-base shrink-0" />
-      <span class="text-xs">Redis Cache Distribuido (Memoria)</span>
-    </div>
-    <div class="text-[10.5px] text-ink/75 mt-0.5 leading-snug">
-      Resolución de permisos en memoria en &lt; 5 ms. Descarga el estrés de SQL Server.
-    </div>
-  </div>
-
-  <div class="card p-2 border-l-3 border-[#CC292B] bg-white">
-    <div class="flex items-center gap-1.5 font-bold text-ink">
-      <div class="i-simple-icons-microsoftsqlserver text-[#CC292B] text-base shrink-0" />
-      <div class="i-mdi-transit-connection text-brand-navy text-base shrink-0" />
-      <span class="text-xs">SQL Server + SPs Fachada (Datos)</span>
-    </div>
-    <div class="text-[10.5px] text-ink/75 mt-0.5 leading-snug">
-      Compatibilidad total con firmas idénticas para las 37 aplicaciones sin tocar código.
-    </div>
+    <p class="text-ink/80 leading-relaxed">
+      Enfocar el proyecto en un portal web interno para administrar accesos y perfiles. La tecnología concreta queda por definir.
+    </p>
   </div>
 </div>
 
+<div class="mt-3 card p-3 border-l-4 border-brand-red bg-brand-red/5 text-xs flex items-start gap-2">
+  <div class="i-mdi-progress-question text-brand-red text-lg shrink-0" />
+  <p class="text-ink/80 leading-relaxed">
+    <b class="text-brand-red-dark">Pendiente de validar:</b> alternativas de arquitectura e integración con el código legado y el esquema de base de datos anonimizado entregados al equipo. En esta EVA definimos el problema y sus límites; el diseño técnico corresponde a una etapa posterior.
+  </p>
 </div>
 
 <!--
 Speaker Notes:
-"Gracias Abraham. Para materializar estos requerimientos, adoptamos una arquitectura desacoplada en 3 capas que responde con exactitud a lo solicitado por el cliente: C# sobre .NET moderno y SQL Server. En el frontend, utilizaremos una SPA construida en React, perfectamente optimizada para correr en el navegador Edge dentro del entorno Citrix, permitiendo que la interfaz de clonación sea instantánea y sin recargas de página. En el backend, elegimos .NET 10 utilizando la librería FastEndpoints. Esta librería implementa el patrón REPR (Request-Endpoint-Response), lo que nos da la misma ergonomía, limpieza y velocidad extrema que los frameworks modernos, pero cien por ciento nativo en el entorno corporativo de Microsoft. Además, incorporamos Redis como caché distribuida: cuando una aplicación satélite consulta un permiso, no va al disco duro de SQL Server; se resuelve en memoria en menos de 5 milisegundos."
+"Gracias Abraham. En esta etapa no estamos cerrando una arquitectura. Partimos de lo levantado con el cliente: el sistema actual se apoya en .NET y SQL Server, y el equipo de TI lo usa dentro de Citrix con Microsoft Edge. La restricción principal es la continuidad: 37 sistemas satélite consumen procedimientos almacenados y se debe mantener su firma y resultado, sin modificar esas aplicaciones. A partir de esa necesidad, proponemos centrar el alcance en un portal web interno para administrar accesos y perfiles. La tecnología concreta y el diseño de integración quedan pendientes; deberán decidirse tras revisar el código legado y el esquema anonimizado que recibió el equipo, y comprobar que la compatibilidad se mantiene. En la siguiente diapositiva revisaremos los riesgos relacionados con los sistemas satélite y los controles que debemos considerar."
 -->
-
 ---
 
 <div class="flex-between items-center mb-1">
